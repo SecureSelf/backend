@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import {connectDB} from './config/db.js';
 import userRoute from './routes/userRoute.js';
+import documentRoute from './routes/documentRoute.js';
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(errorHandler);
 app.use(cookieParser());
 
 app.use("/api/user",userRoute);
+app.use("/api/document",documentRoute);
 
 app.listen(port,()=>{
     console.log(`http://localhost:${port}`);
