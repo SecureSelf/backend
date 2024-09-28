@@ -139,6 +139,10 @@ const resetPassword = asyncHandler( async(req,res)=>{
     res.json({message:"Password changed successfully"});
 })
 
+const uploadDocument = asyncHandler( async (req,res)=>{
+
+});
+
 export {
     userRegister,
     verifyEmail,
