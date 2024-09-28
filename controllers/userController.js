@@ -139,14 +139,48 @@ const resetPassword = asyncHandler( async(req,res)=>{
     res.json({message:"Password changed successfully"});
 })
 
-const uploadDocument = asyncHandler( async (req,res)=>{
+const logout = asyncHandler( async(req,res)=>{
+    const cookie = req.cookies;
+    if(!cookie.refreshToken){
+        throw new Error("No refresh token is available");
+    }
+    const refreshToken = cookie.refreshToken;
+    const user = await userModel.findOne({ refreshToken } );
+    if(!user){
+        res.clearCookie("refreshToken",{
+            httpOnly:true,
+            secure:true,
+        });
+        return res.sendStatus(204); 
+    }
+    await userModel.findOneAndUpdate({refreshToken},{
+         refreshToken:"",
+    });
+    res.clearCookie("refreshToken",{
+        httpOnly:true,
+        secure:true,
+    });
+     res.sendStatus(204); 
+})
 
-});
+const getUser = asyncHandler(async(req,res)=>{
+   const {_id} = req.user;
+   const user = await userModel.findById(_id);
+   if(!user){
+     res.json({message:"user doesnot exist"});
+   }
+   res.json({
+    name:user.name,
+    email:user.email
+   })
+})
 
 export {
     userRegister,
     verifyEmail,
     userLogin,
     resetPassword,
-    sendOtp
+    sendOtp,
+    logout,
+    getUser
 }

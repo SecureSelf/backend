@@ -9,12 +9,13 @@ const documentSchema = new mongoose.Schema(
     discription:{
         type:String,
     },
-    image:{
+    imageUrl:{
         type:String,
         required:true
     },
     userId:{
-        type:mongoose.Schema.Types.ObjectId
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"users"
     }
   },
   {
@@ -22,6 +23,6 @@ const documentSchema = new mongoose.Schema(
   }
 );
 
-const documentModel = mongoose.models.users || mongoose.model("users", documentSchema);
+const documentModel = mongoose.models.documents || mongoose.model("documents", documentSchema);
 
 export default documentModel;
