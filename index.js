@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import {connectDB} from './config/db.js';
 import userRoute from './routes/userRoute.js';
 import documentRoute from './routes/documentRoute.js';
+import noteRoute from './routes/noteRoute.js';
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(cookieParser());
 
 app.use("/api/user",userRoute);
 app.use("/api/document",documentRoute);
+app.use("/api/notes",noteRoute);
 
 app.listen(port,()=>{
     console.log(`http://localhost:${port}`);

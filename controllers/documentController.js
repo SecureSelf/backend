@@ -15,6 +15,13 @@ const addDocument = asyncHandler( async(req,res)=>{
    res.json({message:"document created successfully",newDocument});
 })
 
+const getDocuments = asyncHandler( async(req,res)=>{
+   const {userId} = req.user;
+   const documents = await  documentModel.find({userId:userId})
+
+   res.json(documents);
+})
+
 const uploadImages = asyncHandler( async(req,res)=>{
     try {
         const uploader = (path) => cloudinaryUploadImg(path,"images");
@@ -37,5 +44,6 @@ const uploadImages = asyncHandler( async(req,res)=>{
 
 export {
     uploadImages,
-    addDocument
+    addDocument,
+    getDocuments
 }
