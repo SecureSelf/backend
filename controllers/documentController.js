@@ -2,9 +2,13 @@ import { cloudinaryUploadImg } from "../utils/cloudinary.js";
 import asyncHandler from 'express-async-handler'
 import fs from 'fs'
 import documentModel from "../models/documentModel.js";
+import validateMongoDbId from "../utils/validateMongoId.js";
+
+
 const addDocument = asyncHandler( async(req,res)=>{
    const {category,description,imageUrl} = req.body;
    const user_id = req.user._id;
+   validateMongoDbId(user_id);
 
    const newDocument = await documentModel.create({
      category,
@@ -17,6 +21,7 @@ const addDocument = asyncHandler( async(req,res)=>{
 
 const getDocuments = asyncHandler( async(req,res)=>{
    const {userId} = req.user;
+   validateMongoDbId(userId);
    const documents = await  documentModel.find({userId:userId})
 
    res.json(documents);

@@ -161,6 +161,7 @@ const userLogin = asyncHandler(async (req, res) => {
 const resetPassword = asyncHandler(async (req, res) => {
   const { password } = req.body;
   const id = req.params.id;
+  validateMongoDbId(id);
 
   const user = await userModel.findById(id);
 
@@ -199,6 +200,7 @@ const logout = asyncHandler(async (req, res) => {
 
 const getUser = asyncHandler(async (req, res) => {
   const { _id } = req.user;
+  validateMongoDbId(_id);
   const user = await userModel.findById(_id);
   if (!user) {
     res.json({ message: "user doesnot exist" });
@@ -210,6 +212,20 @@ const getUser = asyncHandler(async (req, res) => {
   });
 });
 
+const updateUser = asyncHandler(async (req,res)=>{
+   const {_id} = req.user;
+   validateMongoDbId(_id);
+
+   const updatedUser = await userModel.findByIdAndUpdate(_id,req.body,{new:true});
+   res.json(updatedUser);
+})
+
+const deleteUser = asyncHandler( async (req,res)=>{
+    const {_id} = req.user;
+    const deletedUser = await userModel.findByIdAndDelete(_id);
+    res.json({success:true,message:"User deleted successfully"});
+})
+
 export {
   userRegister,
   verifyEmail,
@@ -218,4 +234,6 @@ export {
   sendOtp,
   logout,
   getUser,
+  updateUser,
+  deleteUser
 };
