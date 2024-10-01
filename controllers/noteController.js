@@ -1,13 +1,12 @@
 import asyncHandler from 'express-async-handler';
 import noteModel from '../models/noteModel.js';
 import mongoose from 'mongoose';
-import validateMongoDbId from '../utils/validateMongoId.js';
+//import v// validate here your mongo id from '../utils/validateMongoId.js';
 
 // Add a new note
 const addNotes = asyncHandler(async (req, res) => {
     const { title, description } = req.body;
     const { _id } = req.user; // _id of the user
-    validateMongoDbId(_id);
     const note = await noteModel.create({
         title,
         description,
@@ -21,7 +20,6 @@ const addNotes = asyncHandler(async (req, res) => {
 const getNotes = asyncHandler(async (req, res) => {
     const { category } = req.body;
     const { _id } = req.user; // _id of the user
-    validateMongoDbId(_id);
     // If category is not provided, fetch notes without filtering by category
     const query = { userId: _id };
     if (category) {
@@ -47,7 +45,7 @@ const getNotes = asyncHandler(async (req, res) => {
 // Update a note by noteId
 const updateNotes = asyncHandler(async (req, res) => {
     const { notesId } = req.params;
-    validateMongoDbId(notesId);
+    // validate here your mongo id(notesId);
     // Find the note by its ID
     const note = await noteModel.findById(notesId);
     if (!note) {
@@ -63,7 +61,7 @@ const updateNotes = asyncHandler(async (req, res) => {
 // Delete a note by noteId
 const deleteNotes = asyncHandler(async (req, res) => {
     const { notesId } = req.params;
-    validateMongoDbId(notesId);
+    // validate here your mongo id(notesId);
     // Find and delete the note
     const deletedNote = await noteModel.findByIdAndDelete(notesId);
     if (!deletedNote) {

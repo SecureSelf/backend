@@ -2,7 +2,7 @@ import asyncHandler from "express-async-handler";
 import userModel from "../models/userModel.js";
 import GenerateJwtToken from "../config/generateJwtToken.js";
 import GenerateRefreshToken from "../config/generateRefreshToken.js";
-import validateMongoDbId from "../utils/validateMongoId.js";
+// validate here your mongo id from "../utils/validateMongoId.js";
 import sendEmail from "./emailController.js";
 import bcrypt from "bcrypt";
 
@@ -161,7 +161,7 @@ const userLogin = asyncHandler(async (req, res) => {
 const resetPassword = asyncHandler(async (req, res) => {
   const { password } = req.body;
   const id = req.params.id;
-  validateMongoDbId(id);
+  // validate here your mongo id(id);
 
   const user = await userModel.findById(id);
 
@@ -200,7 +200,7 @@ const logout = asyncHandler(async (req, res) => {
 
 const getUser = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  validateMongoDbId(_id);
+  // validate here your mongo id(_id);
   const user = await userModel.findById(_id);
   if (!user) {
     res.json({ message: "user doesnot exist" });
@@ -214,7 +214,7 @@ const getUser = asyncHandler(async (req, res) => {
 
 const updateUser = asyncHandler(async (req,res)=>{
    const {_id} = req.user;
-   validateMongoDbId(_id);
+   // validate here your mongo id(_id);
 
    const updatedUser = await userModel.findByIdAndUpdate(_id,req.body,{new:true});
    res.json(updatedUser);
