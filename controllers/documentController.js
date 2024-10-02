@@ -1,49 +1,60 @@
 import { cloudinaryUploadImg } from "../utils/cloudinary.js";
 import asyncHandler from 'express-async-handler'
-import fs from 'fs'
+import fs from 'fs/promises'
 import documentModel from "../models/documentModel.js";
 //import // validate here your mongo id from "../utils/validateMongoId.js";
 
 
 const addDocument = asyncHandler( async(req,res)=>{
    const {category,description,imageUrl} = req.body;
-   const user_id = req.user._id;
+   const userId = req.user._id;
 
    const newDocument = await documentModel.create({
      category,
      description,
      imageUrl,
-     user_id
+     userId
    })
    res.json({message:"document created successfully",newDocument});
 })
 
 const getDocuments = asyncHandler( async(req,res)=>{
-   const {userId} = req.user;
-   const documents = await  documentModel.find({userId:userId})
-
+   const { _id } = req.user;
+   const documents = await documentModel.find({ userId:_id })
    res.json(documents);
 })
 
-const uploadImages = asyncHandler( async(req,res)=>{
+// import fs from 'fs/promises'; // Ensure you're importing from fs/promises
+
+const uploadImages = asyncHandler(async (req, res) => {
     try {
-        const uploader = (path) => cloudinaryUploadImg(path,"images");
-        const urls = [];
-        const files = req.files;
-        for(const file of files){
-           const {path} = file;
-           const newPath = await uploader(path);
-           urls.push(newPath);
-           fs.unlinkSync(path);
+        const uploader = (path) => cloudinaryUploadImg(path, "image");
+        const urls = []; // To store the uploaded image URLs
+
+        // Get the uploaded file
+        const file = req.file; // Use req.file for single file uploads
+
+        // Check if the file exists
+        if (!file) {
+            return res.status(400).json({ message: "No file uploaded." });
         }
-        const images = urls.map((file)=>{
-           return file;
-       })
-       res.json(images);
+
+        const filePath = file.path; // Get the path of the uploaded file
+        const newPath = await uploader(filePath); // Upload to Cloudinary
+        urls.push(newPath); // Store the URL
+
+        // Remove the file from the server after upload
+        await fs.unlink(filePath); // Await the unlink operation
+        res.json(urls); // Send the array of URLs (it will have only one URL in this case)
     } catch (error) {
-       throw new Error(error);
+        // Handle any errors that occur during the upload
+        console.error("Error uploading image:", error);
+        res.status(500).json({ message: "Error uploading image", error: error.message });
     }
-})
+});
+
+
+
 
 export {
     uploadImages,

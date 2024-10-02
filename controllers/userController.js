@@ -41,10 +41,14 @@ const userRegister = asyncHandler(async (req, res) => {
 const verifyEmail = asyncHandler(async (req, res) => {
   const { email, otp } = req.body;
   const user = await userModel.findOne({ email: email });
-
+  
+  if(!user){
+    res.status(401);
+    return res.json({message:"User Does Not exist"});
+  }
   if (otp !== user.emailOTP.toString()) {
     res.status(400);
-    res.json({ success: false, message: "Otp is incorrect" });
+   return res.json({ success: false, message: "Otp is incorrect" });
   }
   user.emailOTP = "";
   user.emailOtpExpires = "";

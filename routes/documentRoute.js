@@ -5,7 +5,7 @@ import { addDocument, getDocuments, uploadImages } from '../controllers/document
 
 const router = express.Router();
 
-router.post('/upload-image',validateToken,uploadPhoto.array("images",1),documentImgResize,uploadImages);
+router.post('/upload-image',validateToken,uploadPhoto,documentImgResize,uploadImages);
 router.post('/add-document',validateToken,addDocument);
 router.get('/get-documents',validateToken,getDocuments);
 
