@@ -11,6 +11,7 @@ const validateToken = asyncHandler(async (req, res, next) => {
         try {
             const decoded = jwt.verify(token, process.env.MY_TOKEN_STRING);
             req.user = decoded.user; 
+            console.log("m",req.user);
             next();
         } catch (err) {
             console.error("Token verification failed:", err.message);

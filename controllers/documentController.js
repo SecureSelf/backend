@@ -26,38 +26,32 @@ const getDocuments = asyncHandler( async(req,res)=>{
 
 // import fs from 'fs/promises'; // Ensure you're importing from fs/promises
 
-const uploadImages = asyncHandler(async (req, res) => {
-    try {
-        const uploader = (path) => cloudinaryUploadImg(path, "image");
-        const urls = []; // To store the uploaded image URLs
+// const uploadImages = asyncHandler(async (req, res) => {
+//     try {
+//         const uploader = (path) => cloudinaryUploadImg(path, "image");
+//         const urls = []; 
 
-        // Get the uploaded file
-        const file = req.file; // Use req.file for single file uploads
+//         const file = req.file; 
+//         if (!file) {
+//             return res.status(400).json({ message: "No file uploaded." });
+//         }
 
-        // Check if the file exists
-        if (!file) {
-            return res.status(400).json({ message: "No file uploaded." });
-        }
+//         const filePath = file.path; 
+//         const newPath = await uploader(filePath);
+//         urls.push(newPath);
 
-        const filePath = file.path; // Get the path of the uploaded file
-        const newPath = await uploader(filePath); // Upload to Cloudinary
-        urls.push(newPath); // Store the URL
-
-        // Remove the file from the server after upload
-        await fs.unlink(filePath); // Await the unlink operation
-        res.json(urls); // Send the array of URLs (it will have only one URL in this case)
-    } catch (error) {
-        // Handle any errors that occur during the upload
-        console.error("Error uploading image:", error);
-        res.status(500).json({ message: "Error uploading image", error: error.message });
-    }
-});
+//         res.json(urls); 
+//     } catch (error) {
+//         console.error("Error uploading image:", error);
+//         res.status(500).json({ message: "Error uploading image", error: error.message });
+//     }
+// });
 
 
 
 
 export {
-    uploadImages,
+    // uploadImages,
     addDocument,
     getDocuments
 }
