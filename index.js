@@ -17,7 +17,7 @@ import cors from 'cors';
 
 // Enable CORS
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow requests only from this origin
+    origin: 'https://secureself-frontend-8xbs.vercel.app/', // Allow requests only from this origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // If you need to handle cookies or auth
 }));
