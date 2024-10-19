@@ -36,6 +36,7 @@ const userRegister = asyncHandler(async (req, res) => {
     message: "User registered successfully.",
     userId: newUser._id,
   });
+  
   // send otp
   const user = await userModel.findOne({ email });
   if (!user) {
